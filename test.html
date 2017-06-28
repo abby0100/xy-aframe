@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<!-- saved from url=(0034)http://www.nodejs.cc/page/160.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <title>HTML5获取摄像头视频演示-nodejs社区</title>
+	<script src="js/aframe-v0.5.0.min.js"></script>
+<body>
+	
+	<div>
+		Hello world
+	</div>
+
+
+<a-scene>
+  <a-assets>
+    <video id="video" autoplay loop="true"></video>
+  </a-assets>
+  <!-- Using the asset management system. -->
+  <a-video src="#video" width="50%" height="50%" position="0 0 20"></a-video>
+  <a-video src="#video" width="50%" height="50%" position="0 0 -20"></a-video>
+</a-scene>
+
+	
+	<script>
+		window.addEventListener("DOMContentLoaded", function() {
+			var video = document.getElementById("video"),
+				errBack = function(error) {
+					console.log("视频获取失败: ", error.code); 
+				};
+
+			var constraints = window.constraints = {
+			  audio: false,
+			  video: true
+			};
+
+			if(navigator.getUserMedia) { // Standard
+				navigator.getUserMedia(constraints, function(stream) {
+					video.src = stream;
+					video.play();
+				}, errBack);
+			} else if(navigator.webkitGetUserMedia) { // WebKit-prefixed
+				navigator.webkitGetUserMedia(constraints, function(stream){
+					video.src = window.webkitURL.createObjectURL(stream);
+					video.play();
+				}, errBack);
+			} else if(navigator.mozGetUserMedia) { // moz-prefixed
+				navigator.mozGetUserMedia(constraints, function(stream){
+					video.src = window.URL.createObjectURL(stream);
+					video.play();
+				}, errBack);
+			}
+			
+		}, false);
+	</script>
+
+</body>
+
+</html>
